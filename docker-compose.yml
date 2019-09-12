@@ -12,9 +12,7 @@ services:
 
   config-server:
     build: 
-      context: https://github.com/SCOSSI/spring-config-server-poc.git#:configserver
-      args:
-        -JAR_FILE: configserver/build/libs/configserver.jar
+      context: /configserver
     container_name: configserver
     hostname: configserver
     ports:
@@ -24,9 +22,7 @@ services:
 
   client-service-one:
     build: 
-      context: https://github.com/SCOSSI/spring-config-server-poc.git#:client-service-one
-      args:
-        -JAR_FILE: client-service-one/build/libs/client_service.jar
+      context: /client-service-one
     hostname: client-server-one
     container_name: client-server-one
     ports:
@@ -36,9 +32,7 @@ services:
 
   client-service-two:
     build: 
-      context: https://github.com/SCOSSI/spring-config-server-poc.git#:client-service-two
-      args:
-        -JAR_FILE: client-service-one/build/libs/client_service.jar
+      context: /client-service-two
     hostname: client-server-two
     container_name: client-server-two
     ports:
