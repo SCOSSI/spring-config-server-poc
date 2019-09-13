@@ -4,8 +4,8 @@ services:
   rabbitmq:
     build: 
       context: rabbitmq
-    hostname: my-rabbit
-    container_name: rabbit13
+    hostname: rabbitmq
+    container_name: rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -15,15 +15,12 @@ services:
         interval: 5s
         timeout: 10s
         retries: 5
-    networks:
-      - con
-    
 
   config-server:
     build: 
       context: configserver
-    container_name: configserver
-    hostname: configserver
+    container_name: config-server
+    hostname: config-server
     ports:
       - "8081:8081"
     healthcheck:
@@ -34,9 +31,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    networks:
-      - con
-
 
   client-service-one:
     build: 
@@ -48,11 +42,19 @@ services:
     depends_on:
       config-server:
         condition: service_healthy
-    networks:
-      - con 
 
-networks:
-  con:
-    driver: bridge                    
+  client-service-two:
+    build: 
+      context: client-service-two
+    hostname: client-service-two
+    container_name: service-two
+    ports:
+      - "8083:8083"
+    depends_on:
+      config-server:
+        condition: service_healthy        
+
+
+              
 
  
