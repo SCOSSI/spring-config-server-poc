@@ -1,41 +1,58 @@
-version: 3
+version: '2.1'
 
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    build: 
+      context: rabbitmq
     hostname: my-rabbit
-    name: rabbit13
+    container_name: rabbit13
     ports:
       - "15672:15672"
       - "5672:5672"
       - "25676:25676"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 5s
+        timeout: 10s
+        retries: 5
+    networks:
+      - con
+    
 
   config-server:
     build: 
-      context: /configserver
+      context: configserver
     container_name: configserver
     hostname: configserver
     ports:
-      - "8083:8083"
+      - "8081:8081"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8081/admin/health"]
+        interval: 10s
+        timeout: 20s
+        retries: 5
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - con
+
 
   client-service-one:
     build: 
-      context: /client-service-one
-    hostname: client-server-one
-    container_name: client-server-one
-    ports:
-      - "8081:8081"
-    depends_on:
-      - config-server
-
-  client-service-two:
-    build: 
-      context: /client-service-two
-    hostname: client-server-two
-    container_name: client-server-two
+      context: client-service-one
+    hostname: client-service-one
+    container_name: service-one
     ports:
       - "8082:8082"
     depends_on:
-      - config-server              
+      config-server:
+        condition: service_healthy
+    networks:
+      - con 
+
+networks:
+  con:
+    driver: bridge                    
+
+ 

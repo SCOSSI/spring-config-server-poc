@@ -20,8 +20,7 @@ dependencies {
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '2.1.2.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.1.7.RELEASE'
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-amqp', version: '2.1.1.RELEASE'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
 }
 
 dependencyManagement {
